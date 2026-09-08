@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Moodify</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        /* Dynamic theme colors from Python */
+        :root {
+            --primary-color: {{ theme.primary }};
+            --secondary-color: {{ theme.secondary }};
+            --bg-gradient: {{ theme.bg }};
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <h3>🎯 Navigation</h3>
+        <form action="{{ url_for('restart_quiz') }}" method="get">
+            <button type="submit">🏠 Recommencer le questionnaire</button>
+        </form>
+        <form action="{{ url_for('show_help') }}" method="get">
+            <button type="submit">❓ Comment ça marche</button>
+        </form>
+        <form action="{{ url_for('manage_playlists') }}" method="get">
+            <button type="submit">▶️ Mes Playlists</button>
+        </form>
+
+        <hr>
+        <h3>➕ Créer une Playlist</h3>
+        <form action="{{ url_for('manage_playlists') }}" method="post">
+            <input type="text" name="new_playlist_name" placeholder="Nom de la playlist" required>
+            <button type="submit">Créer</button>
+        </form>
+    </div>
+
+    <div class="main-content">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div id="flashModal" class="modal" {% if category == 'success' or category == 'warning' %}data-show-modal="true"{% endif %}>
+                        <div class="modal-content">
+                            <span class="close-button">&times;</span>
+                            <p class="modal-message {{ category }}">{{ message }}</p>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <div style="text-align: center;">
+            <h1 style="font-size: 3rem; font-weight: 800; margin-bottom: 0.5rem;">🎵 Bienvenue sur Moodify</h1>
+            <p style="font-size: 1.5rem; font-weight: 400; margin-top: 0; color: #ffffff;">
+                Votre système de recommandation intelligent pour créer des playlists contextuelles personnalisées
+            </p>
+        </div>
+
+        {% if view == "quiz" %}
+            <h2 style='text-align: center; margin: 2rem 0;'>{{ question }}</h2>
+            <form action="{{ url_for('index') }}" method="post" class="quiz-form">
+                <div class="options-grid">
+                    {% for option in options %}
+                        <button type="submit" name="answer" value="{{ option }}">{{ option.replace('_', ' ').title() }}</button>
+                    {% endfor %}
+                </div>
+                {% if current_step > 0 %}
+                    <button type="submit" name="prev_question" value="true" class="prev-button">⬅️ Question précédente</button>
+                {% endif %}
+            </form>
+        {% elif view == "recommendations" %}
+            <h2 style='text-align: center; margin: 2rem 0;'>🎯 Recommandations Suggérées</h2>
+            <form action="{{ url_for('index') }}" method="post" class="new-suggestions-form">
+                <button type="submit" name="new_suggestions" value="true">🔄 Nouvelles suggestions</button>
+            </form>
+
+            {% if songs %}
+                {% if perfect_matches_count > 0 %}
+                    <h3 style='text-align: center; margin: 1.5rem 0;'>✔️ Correspondances Parfaites</h3>
+                    <div class="cards-grid">
+                        {% for song in songs %}
+                            {% if song.is_perfect_match %}
+                                {% include 'song_card.html' %}
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                {# This block uses the has_partial_matches variable passed from app.py #}
+                {% if has_partial_matches %} 
+                    {% if perfect_matches_count > 0 %} 
+                        <h3 style='text-align: center; margin: 1.5rem 0;'>🎵 Autres Recommandations</h3>
+                    {% endif %}
+                    <div class="cards-grid">
+                        {% for song in songs %}
+                            {% if not song.is_perfect_match %}
+                                {% include 'song_card.html' %}
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+                
+                {% if perfect_matches_count > 0 %}
+                    <div class="info-section">
+                        <h4>✔️ {{ perfect_matches_count }} correspondances parfaites trouvées sur {{ total_recommendations_count }} recommandations !</h4>
+                        <p style="margin: 0.5rem 0 0 0;text-align: center; font-size: 1rem; color: rgba(255,255,255,0.8);">
+                            Ces chansons correspondent exactement à tous vos contextes.
+                        </p>
+                    </div>
+                {% endif %}
+
+            {% else %}
+                <p class="info-message">Aucune recommandation trouvée. Essayez de modifier vos réponses ou réinitialisez le questionnaire.</p>
+            {% endif %}
+
+        {% elif view == "help" %}
+        
+            <div class="help-section">
+                <button type="button" onclick="history.back()" class="back-to-previous-page-button">
+                     ⬅️ 
+                 </button>
+                <h3 style="margin: 0.5rem 0 0 0;text-align: center; font-size: 2rem; ">🎯 Comment ça marche ?</h3>
+                <p style="font-size: 1.25rem;"><strong>L'Assistant Musical Intelligent</strong> vous aide à découvrir la musique parfaite selon votre humeur !</p>
+                <h4 style="color: blueviolet;font-size: 1.25rem;" >📋 Le processus :</h4>
+                <ul>
+                    <li style="font-size: 1.25rem;"><strong>Répondez à 6 questions simples</strong> sur votre état d'esprit et environnement.</li>
+                    <li style="font-size: 1.25rem;"><strong>Obtenez des recommandations personnalisées</strong> avec des scores de compatibilité.</li>
+                    <li style="font-size: 1.25rem;"><strong>Intégration Spotify</strong> : Écoutez directement les extraits ou la chanson complète sur Spotify.</li>
+                    <li style="font-size: 1.25rem;"><strong>Créez et gérez vos playlists</strong> : Ajoutez vos chansons préférées à des playlists personnalisées.</li>
+                    <li style="font-size: 1.25rem;"><strong>Exportez vos playlists</strong> : Téléchargez vos playlists au format texte pour les sauvegarder ou les partager.</li>
+                </ul>
+                <h4 style="color: blueviolet;font-size: 1.25rem;">🎵 Algorithme intelligent amélioré :</h4>
+                <ul>
+                    <li style="font-size: 1.25rem;"><strong>Perfect Matching prioritaire</strong> : Les chansons avec correspondance parfaite à vos réponses sont mises en avant.</li>
+                    <li style="font-size: 1.25rem;"><strong>Analyse BPM + Mood</strong> : Le tempo et la positivité de la musique sont adaptés à votre état émotionnel.</li>
+                    <li style="font-size: 1.25rem;"><strong>Contexte multi-dimensionnel</strong> : Prend en compte le lieu, l'activité, l'aspect social et le moment de la journée.</li>
+                    <li style="font-size: 1.25rem;"><strong>Diversité garantie</strong> : Notre algorithme évite les répétitions d'artistes pour vous découvrir de nouvelles sonorités.</li>
+                    <li style="font-size: 1.25rem;"><strong>Badge "PARFAIT"</strong> : Identifie visuellement les correspondances idéales pour une reconnaissance facile.</li>
+                </ul>
+                <p style="color: blueviolet;font-size: 1.5rem;text-align: center; ">Prêt à découvrir votre prochaine chanson préférée ? 🎧</p>
+               
+            </div>
+        {% endif %}
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const modal = document.getElementById('flashModal');
+            const closeButton = document.querySelector('.close-button');
+
+            // Show modal if it has the data-show-modal attribute
+            if (modal && modal.dataset.showModal === 'true') {
+                modal.style.display = 'block';
+            }
+
+            // Close the modal when the close button is clicked
+            if (closeButton) {
+                closeButton.addEventListener('click', () => {
+                    modal.style.display = 'none';
+                });
+            }
+
+            // Close the modal when clicking outside of the modal content
+            window.addEventListener('click', (event) => {
+                if (event.target == modal) {
+                    modal.style.display = 'none';
+                }
+            });
+        });
+    </script>
+    
+</body>
+</html>
