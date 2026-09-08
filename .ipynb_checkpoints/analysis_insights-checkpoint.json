@@ -1,0 +1,436 @@
+{
+  "strong_correlations": [
+    {
+      "context": "meteo",
+      "feature": "valence",
+      "correlation": -0.7555165166922351,
+      "strength": "forte"
+    },
+    {
+      "context": "activite",
+      "feature": "bpm_estime",
+      "correlation": 0.46098396931038976,
+      "strength": "forte"
+    },
+    {
+      "context": "meteo",
+      "feature": "danceability",
+      "correlation": -0.4468657418244317,
+      "strength": "forte"
+    },
+    {
+      "context": "activite",
+      "feature": "energie",
+      "correlation": 0.4459515619810054,
+      "strength": "forte"
+    },
+    {
+      "context": "emotionnel",
+      "feature": "energie",
+      "correlation": -0.4167631197148088,
+      "strength": "forte"
+    },
+    {
+      "context": "temporel",
+      "feature": "valence",
+      "correlation": 0.37244077077859694,
+      "strength": "forte"
+    },
+    {
+      "context": "emotionnel",
+      "feature": "danceability",
+      "correlation": -0.3645310449451624,
+      "strength": "forte"
+    },
+    {
+      "context": "temporel",
+      "feature": "danceability",
+      "correlation": 0.3352128001103315,
+      "strength": "forte"
+    },
+    {
+      "context": "activite",
+      "feature": "danceability",
+      "correlation": 0.3099505793976109,
+      "strength": "forte"
+    },
+    {
+      "context": "emotionnel",
+      "feature": "acousticness",
+      "correlation": 0.2835777181143905,
+      "strength": "modérée"
+    },
+    {
+      "context": "meteo",
+      "feature": "energie",
+      "correlation": -0.24481090936125638,
+      "strength": "modérée"
+    },
+    {
+      "context": "temporel",
+      "feature": "energie",
+      "correlation": 0.244092929226982,
+      "strength": "modérée"
+    },
+    {
+      "context": "activite",
+      "feature": "acousticness",
+      "correlation": -0.2224434629222108,
+      "strength": "modérée"
+    },
+    {
+      "context": "meteo",
+      "feature": "bpm_estime",
+      "correlation": -0.21449864846175776,
+      "strength": "modérée"
+    },
+    {
+      "context": "lieu",
+      "feature": "energie",
+      "correlation": 0.20176089857196913,
+      "strength": "modérée"
+    },
+    {
+      "context": "lieu",
+      "feature": "bpm_estime",
+      "correlation": 0.19220634406099402,
+      "strength": "modérée"
+    },
+    {
+      "context": "emotionnel",
+      "feature": "bpm_estime",
+      "correlation": -0.18382776600715245,
+      "strength": "modérée"
+    },
+    {
+      "context": "lieu",
+      "feature": "acousticness",
+      "correlation": -0.17278310174094885,
+      "strength": "modérée"
+    },
+    {
+      "context": "activite",
+      "feature": "valence",
+      "correlation": -0.1706272011590541,
+      "strength": "modérée"
+    },
+    {
+      "context": "lieu",
+      "feature": "danceability",
+      "correlation": 0.16284923677163443,
+      "strength": "modérée"
+    }
+  ],
+  "genre_patterns": {
+    "contexte_temporel": [
+      [
+        "weekend",
+        "pop",
+        94.61883408071749
+      ],
+      [
+        "apres_midi",
+        "pop",
+        63.90977443609023
+      ],
+      [
+        "journee",
+        "pop",
+        57.692307692307686
+      ],
+      [
+        "nuit",
+        "folk",
+        42.857142857142854
+      ],
+      [
+        "matin",
+        "jazz",
+        35.294117647058826
+      ],
+      [
+        "soiree",
+        "blues",
+        31.818181818181817
+      ],
+      [
+        "soiree",
+        "classical",
+        22.727272727272727
+      ]
+    ],
+    "contexte_meteo": [
+      [
+        "chaud",
+        "pop",
+        90.82969432314411
+      ],
+      [
+        "ensoleille",
+        "pop",
+        87.78280542986425
+      ],
+      [
+        "nuageux",
+        "blues",
+        58.82352941176471
+      ],
+      [
+        "neutre",
+        "pop",
+        43.5
+      ],
+      [
+        "froid",
+        "classical",
+        40.0
+      ],
+      [
+        "froid",
+        "folk",
+        40.0
+      ],
+      [
+        "pluvieux",
+        "blues",
+        40.0
+      ],
+      [
+        "nuageux",
+        "metal",
+        29.411764705882355
+      ]
+    ],
+    "contexte_activite": [
+      [
+        "fete",
+        "pop",
+        91.17647058823529
+      ],
+      [
+        "cuisine",
+        "pop",
+        79.7752808988764
+      ],
+      [
+        "conduite",
+        "pop",
+        79.76190476190477
+      ],
+      [
+        "sport",
+        "pop",
+        71.68831168831169
+      ],
+      [
+        "detente",
+        "pop",
+        67.17948717948717
+      ],
+      [
+        "etude",
+        "folk",
+        64.28571428571429
+      ],
+      [
+        "travail",
+        "folk",
+        40.0
+      ],
+      [
+        "loisir",
+        "blues",
+        39.473684210526315
+      ],
+      [
+        "travail",
+        "classical",
+        30.0
+      ],
+      [
+        "travail",
+        "jazz",
+        30.0
+      ],
+      [
+        "etude",
+        "classical",
+        28.57142857142857
+      ],
+      [
+        "loisir",
+        "indie",
+        26.31578947368421
+      ]
+    ],
+    "contexte_emotionnel": [
+      [
+        "joyeux",
+        "pop",
+        94.8936170212766
+      ],
+      [
+        "energique",
+        "pop",
+        82.17821782178217
+      ],
+      [
+        "romantique",
+        "pop",
+        67.17948717948717
+      ],
+      [
+        "motive",
+        "pop",
+        62.893081761006286
+      ],
+      [
+        "calme",
+        "folk",
+        54.166666666666664
+      ],
+      [
+        "nostalgique",
+        "blues",
+        47.368421052631575
+      ],
+      [
+        "calme",
+        "classical",
+        29.166666666666668
+      ],
+      [
+        "neutre",
+        "pop",
+        25.324675324675322
+      ],
+      [
+        "nostalgique",
+        "indie",
+        21.052631578947366
+      ],
+      [
+        "neutre",
+        "metal",
+        20.12987012987013
+      ]
+    ],
+    "contexte_social": [
+      [
+        "groupe",
+        "pop",
+        73.7864077669903
+      ],
+      [
+        "amis",
+        "pop",
+        68.07817589576547
+      ],
+      [
+        "couple",
+        "pop",
+        64.28571428571429
+      ],
+      [
+        "famille",
+        "pop",
+        60.91954022988506
+      ],
+      [
+        "seul",
+        "blues",
+        28.57142857142857
+      ],
+      [
+        "seul",
+        "indie",
+        22.857142857142858
+      ]
+    ],
+    "contexte_lieu": [
+      [
+        "plage",
+        "pop",
+        100.0
+      ],
+      [
+        "parc",
+        "pop",
+        91.66666666666666
+      ],
+      [
+        "club",
+        "pop",
+        88.88888888888889
+      ],
+      [
+        "voiture",
+        "pop",
+        79.76190476190477
+      ],
+      [
+        "bibliotheque",
+        "folk",
+        75.0
+      ],
+      [
+        "salle_sport",
+        "pop",
+        73.36956521739131
+      ],
+      [
+        "exterieur",
+        "pop",
+        70.2127659574468
+      ],
+      [
+        "restaurant",
+        "pop",
+        60.747663551401864
+      ],
+      [
+        "maison",
+        "pop",
+        53.714285714285715
+      ],
+      [
+        "cafe",
+        "pop",
+        46.93877551020408
+      ],
+      [
+        "bureau",
+        "folk",
+        43.75
+      ],
+      [
+        "bureau",
+        "classical",
+        37.5
+      ],
+      [
+        "cafe",
+        "blues",
+        20.408163265306122
+      ]
+    ]
+  },
+  "audio_features_analyzed": [
+    "energie",
+    "valence",
+    "danceability",
+    "acousticness",
+    "instrumentalness",
+    "speechiness",
+    "liveness",
+    "bpm_estime"
+  ],
+  "contexts_analyzed": [
+    "contexte_temporel",
+    "contexte_meteo",
+    "contexte_activite",
+    "contexte_emotionnel",
+    "contexte_social",
+    "contexte_lieu"
+  ]
+}
