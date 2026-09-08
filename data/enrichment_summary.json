@@ -1,0 +1,58 @@
+{
+  "original_features": [
+    "id",
+    "artiste",
+    "titre",
+    "genre",
+    "contexte_temporel",
+    "contexte_meteo",
+    "contexte_activite",
+    "contexte_emotionnel",
+    "contexte_social",
+    "contexte_lieu",
+    "bpm_estime",
+    "energie",
+    "valence",
+    "danceability",
+    "acousticness",
+    "instrumentalness",
+    "speechiness",
+    "liveness",
+    "notes"
+  ],
+  "new_features": [
+    "macro_genre",
+    "study_suitability",
+    "sport_suitability",
+    "mood_category",
+    "organic_category",
+    "relax_suitability",
+    "groupe_valence",
+    "party_factor",
+    "categorie_energie",
+    "mood_score",
+    "party_category",
+    "organic_score"
+  ],
+  "categorical_features": [
+    "macro_genre",
+    "mood_category",
+    "organic_category",
+    "groupe_valence",
+    "categorie_energie",
+    "party_category"
+  ],
+  "numerical_features": [
+    "study_suitability",
+    "sport_suitability",
+    "relax_suitability",
+    "party_factor",
+    "mood_score",
+    "organic_score"
+  ],
+  "enrichment_stats": {
+    "total_tracks": 887,
+    "total_features": 38,
+    "new_features_count": 12
+  }
+}
