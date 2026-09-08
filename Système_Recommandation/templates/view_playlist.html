@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>moodify</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        /* Dynamic theme colors from Python */
+        :root {
+            --primary-color: {{ theme.primary }};
+            --secondary-color: {{ theme.secondary }};
+            --bg-gradient: {{ theme.bg }};
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <h3>🎯 Navigation</h3>
+        <form action="{{ url_for('restart_quiz') }}" method="get">
+            <button type="submit">🏠 Recommencer le questionnaire</button>
+        </form>
+        <form action="{{ url_for('show_help') }}" method="get">
+            <button type="submit">❓ Comment ça marche</button>
+        </form>
+        <form action="{{ url_for('manage_playlists') }}" method="get">
+            <button type="submit">▶️ Mes Playlists</button>
+        </form>
+
+        <hr>
+        <h3>➕ Créer une Playlist</h3>
+        <form action="{{ url_for('manage_playlists') }}" method="post">
+            <input type="text" name="new_playlist_name" placeholder="Nom de la playlist" required>
+            <button type="submit">Créer</button>
+        </form>
+    </div>
+
+    <div class="main-content">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flash-message {{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <div class="playlist-header">
+            <form action="{{ url_for('manage_playlists') }}" method="get">
+                <button type="submit" class="back-btn">⬅️</button>
+            </form>
+            <h2 style='text-align: center; font-size: 3rem; font-weight: 800; margin-bottom: 0.5rem;'>🎵 Contenu de la Playlist : {{ playlist_name }}</h2>
+            <a href="{{ url_for('export_playlist', playlist_name=playlist_name) }}" class="export-btn">📄</a>
+        </div>
+        <hr>
+
+        {% if not songs %}
+            <p class="info-message" style='text-align: center; font-size: 1rem; margin-bottom: 0.5rem;'>La playlist '{{ playlist_name }}' est vide. Ajoutez des chansons depuis les recommandations !</p>
+        {% else %}
+            <div class="playlist-songs-list">
+                {% for song in songs %}
+                    <div class="playlist-song-item">
+                        <div class="playlist-song-image-container">
+                            {% if song.spotify_info and song.spotify_info.album_image %}
+                                <img src="{{ song.spotify_info.album_image }}" alt="Album cover" class="playlist-song-image">
+                            {% else %}
+                                <div class="playlist-song-image placeholder">🎵</div>
+                            {% endif %}
+                        </div>
+                        <div class="playlist-song-details">
+                            <div class="playlist-song-title">{{ song.titre }}</div>
+                            <div class="playlist-song-artist">{{ song.artiste }}</div>
+                        </div>
+                        <div class="playlist-song-actions">
+                            {% if song.spotify_info and song.spotify_info.external_url %}
+                                <a href="{{ song.spotify_info.external_url }}" target="_blank" class="playlist-action-btn spotify">▶️</a>
+                            {% endif %}
+                            <form action="{{ url_for('remove_from_playlist') }}" method="post" style="display: inline-block;">
+                                <input type="hidden" name="playlist_name" value="{{ playlist_name }}">
+                                <input type="hidden" name="song_index_in_playlist" value="{{ loop.index0 }}"> {# loop.index0 gives 0-based index #}
+                                <button type="submit" class="playlist-action-btn delete">🗑️</button>
+                            </form>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+    
+</body>
+</html>
