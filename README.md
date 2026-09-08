@@ -18,19 +18,19 @@ APIs: Spotify Web API, Wikipedia API
 Stockage: Flask Session & LocalStorage
 Données: Dataset CSV enrichi avec des caractéristiques et contextes musicaux.
 
-🚀 Installation
+## 🚀 Installation
 git clone https://github.com/your-username/moodify.git
 cd moodify
 python -m venv venv
 source venv/bin/activate  # Linux/Mac
-# venv\Scripts\activate   # Windows
+venv\Scripts\activate   # Windows
 pip install -r requirements.txt
 Configurez vos clés Spotify dans un fichier .env, puis placez tracks_dataset_enriched.csv à la racine du projet.
 
-Lancez l'application :
+## Lancez l'application :
 
 python app.py
 Puis ouvrez http://localhost:5001.
 
-🎯 Utilisation
+## 🎯 Utilisation
 Répondez aux 6 questions pour obtenir des recommandations adaptées à votre humeur et votre contexte, écoutez vos titres via Spotify, créez vos playlists et utilisez le chatbot pour rechercher des informations sur Wikipedia.
