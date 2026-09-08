@@ -1,0 +1,160 @@
+<div class="spotify-card">
+    <div class="kebab-menu-container">
+        <button class="kebab-menu-button" aria-label="Options">⋮</button>
+        <ul class="kebab-dropdown">
+            <li class="add-to-playlist-option">
+                Ajouter à la Playlist
+                <ul class="playlist-submenu">
+                    {% if playlist_names %}
+                        {% for p_name in playlist_names %}
+                            <li data-playlist-name="{{ p_name }}" data-song-index="{{ song.original_index }}">
+                                {{ p_name }}
+                            </li>
+                        {% endfor %}
+                    {% else %}
+                        <li>Aucune playlist trouvée</li>
+                    {% endif %}
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <div class="song-header">
+        {% if song.spotify_info and song.spotify_info.album_image %}
+            <img src="{{ song.spotify_info.album_image }}" alt="Album cover" class="album-img">
+        {% else %}
+            <div class="no-album-img">🎵</div>
+        {% endif %}
+    </div>
+    <div class="song-content">
+        <h4 class="song-title">{{ song.titre }}</h4>
+        <p class="song-artist">{{ song.artiste }}</p>
+        <div class="badges-container">
+            <span class="score-badge">⭐ {{ song.score | round(0) }}%</span>
+            {% if song.is_perfect_match %}
+                <span class="perfect-match-badge">🎯 PARFAIT</span>
+            {% endif %}
+        </div>
+
+        {% if song.spotify_info and song.spotify_info.external_url %}
+            <a href="{{ song.spotify_info.external_url }}" target="_blank" class="spotify-btn">🎵 Écouter sur Spotify</a>
+        {% else %}
+            <div class="spotify-unavailable">❌ Non disponible sur Spotify</div>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+// Fonction pour gérer les menus kebab
+function initializeKebabMenus() {
+    // Gestion des boutons kebab
+    document.querySelectorAll('.kebab-menu-button').forEach(button => {
+        // Supprimer les anciens event listeners pour éviter les doublons
+        button.removeEventListener('click', handleKebabClick);
+        button.addEventListener('click', handleKebabClick);
+    });
+
+    // Gestion du hover sur "Ajouter à la Playlist"
+    document.querySelectorAll('.add-to-playlist-option').forEach(option => {
+        option.removeEventListener('mouseenter', handlePlaylistHover);
+        option.removeEventListener('mouseleave', handlePlaylistLeave);
+        option.addEventListener('mouseenter', handlePlaylistHover);
+        option.addEventListener('mouseleave', handlePlaylistLeave);
+    });
+
+    // Gestion des clics sur les items de playlist
+    document.querySelectorAll('.playlist-submenu li[data-playlist-name]').forEach(playlistItem => {
+        playlistItem.removeEventListener('click', handlePlaylistItemClick);
+        playlistItem.addEventListener('click', handlePlaylistItemClick);
+    });
+
+    // Fermer les menus si on clique ailleurs
+    document.removeEventListener('click', handleOutsideClick);
+    document.addEventListener('click', handleOutsideClick);
+}
+
+function handleKebabClick(event) {
+    event.stopPropagation();
+    const dropdown = this.nextElementSibling;
+    
+    // Fermer tous les autres dropdowns
+    document.querySelectorAll('.kebab-dropdown').forEach(otherDropdown => {
+        if (otherDropdown !== dropdown) {
+            otherDropdown.classList.remove('show');
+        }
+    });
+    
+    // Toggle le dropdown actuel
+    dropdown.classList.toggle('show');
+}
+
+function handlePlaylistHover(event) {
+    const submenu = this.querySelector('.playlist-submenu');
+    if (submenu) {
+        submenu.style.display = 'block';
+    }
+}
+
+function handlePlaylistLeave(event) {
+    const submenu = this.querySelector('.playlist-submenu');
+    if (submenu) {
+        submenu.style.display = 'none';
+    }
+}
+
+function handlePlaylistItemClick(event) {
+    event.stopPropagation();
+    
+    const playlistName = this.dataset.playlistName;
+    const songIndex = this.dataset.songIndex;
+
+    if (playlistName && songIndex) {
+        // Créer et soumettre le formulaire
+        const form = document.createElement('form');
+        form.action = "{{ url_for('add_to_playlist') }}";
+        form.method = 'post';
+        form.style.display = 'none';
+
+        const playlistInput = document.createElement('input');
+        playlistInput.type = 'hidden';
+        playlistInput.name = 'playlist_name';
+        playlistInput.value = playlistName;
+        form.appendChild(playlistInput);
+
+        const songIndexInput = document.createElement('input');
+        songIndexInput.type = 'hidden';
+        songIndexInput.name = 'song_original_index';
+        songIndexInput.value = songIndex;
+        form.appendChild(songIndexInput);
+
+        document.body.appendChild(form);
+        form.submit();
+    }
+}
+
+function handleOutsideClick(event) {
+    // Fermer tous les dropdowns si on clique en dehors
+    if (!event.target.closest('.kebab-menu-container')) {
+        document.querySelectorAll('.kebab-dropdown').forEach(dropdown => {
+            dropdown.classList.remove('show');
+        });
+    }
+    
+    // Fermer tous les sous-menus si on clique en dehors
+    if (!event.target.closest('.add-to-playlist-option')) {
+        document.querySelectorAll('.playlist-submenu').forEach(submenu => {
+            submenu.style.display = 'none';
+        });
+    }
+}
+
+// Initialiser les menus quand le DOM est chargé
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeKebabMenus);
+} else {
+    initializeKebabMenus();
+}
+
+// Réinitialiser les menus si du contenu est ajouté dynamiquement
+window.addEventListener('load', initializeKebabMenus);
+</script>
