@@ -1,7 +1,7 @@
-🎵 Moodify : Assistant Musical Intelligent
+# 🎵 Moodify : Assistant Musical Intelligent
 Moodify est une application web intelligente qui combine un système de recommandation musicale personnalisé et un chatbot conversationnel. Elle propose des morceaux adaptés à l'humeur et au contexte de l'utilisateur tout en permettant d'obtenir des informations via Wikipedia.
 
-✨ Fonctionnalités
+ ## ✨ Fonctionnalités
 🎵 Recommandations personnalisées basées sur un questionnaire intelligent de 6 questions.
 🎯 Matching avancé avec scores de compatibilité pour chaque morceau.
 🎧 Intégration Spotify pour écouter et prévisualiser les titres.
