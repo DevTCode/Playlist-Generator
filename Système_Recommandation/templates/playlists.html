@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Moodify</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        /* Dynamic theme colors from Python */
+        :root {
+            --primary-color: {{ theme.primary }};
+            --secondary-color: {{ theme.secondary }};
+            --bg-gradient: {{ theme.bg }};
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <h3>🎯 Navigation</h3>
+        <form action="{{ url_for('restart_quiz') }}" method="get">
+            <button type="submit">🏠 Recommencer le questionnaire</button>
+        </form>
+        <form action="{{ url_for('show_help') }}" method="get">
+            <button type="submit">❓ Comment ça marche</button>
+        </form>
+        <form action="{{ url_for('manage_playlists') }}" method="get">
+            <button type="submit">▶️ Mes Playlists</button>
+        </form>
+
+        <hr>
+        <h3>➕ Créer une Playlist</h3>
+        <form action="{{ url_for('manage_playlists') }}" method="post">
+            <input type="text" name="new_playlist_name" placeholder="Nom de la playlist" required>
+            <button type="submit">Créer</button>
+        </form>
+    </div>
+
+    <div class="main-content">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div id="flashModal" class="modal" {% if category == 'success' %}data-show-modal="true"{% endif %}>
+                        <div class="modal-content">
+                            <span class="close-button">&times;</span>
+                            <p class="modal-message {{ category }}">{{ message }}</p>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <h2 style='text-align: center; font-size: 3rem; font-weight: 800; margin-bottom: 0.5rem;'>🎶 Gérer vos Playlists</h2>
+        <div class="navigation-buttons-top">
+            <form action="{{ url_for('index') }}" method="get" style="display: inline-block;">
+                <button type="submit">📊 Retour aux recommandations</button>
+            </form>
+        </div>
+        <hr>
+
+        <h3 style='text-align: center; font-size: 2rem; font-weight: 400; margin-bottom: 0.5rem;'>Vos playlists existantes</h3>
+        {% if not playlists %}
+            <p class="info-message" style='text-align: center; font-size: 1.5rem; font-weight: 400; margin-bottom: 0.5rem;'>Vous n'avez pas encore de playlists. Créez-en une depuis la barre latérale ou ici !</p>
+        {% else %}
+            <div class="playlist-list-container">
+                {% for playlist_name, songs in playlists.items() %}
+                    <div class="playlist-item">
+                        <span class="playlist-name">{{ playlist_name }}</span> 
+                        <span class="playlist-count">({{ songs | length }} chansons)</span>
+                        <div class="playlist-actions">
+                            <form action="{{ url_for('view_playlist', playlist_name=playlist_name) }}" method="get" style="display: inline-block;">
+                                <button type="submit" class="view-playlist-btn">👀 Voir</button>
+                            </form>
+                            <form action="{{ url_for('manage_playlists') }}" method="post" style="display: inline-block;">
+                                <input type="hidden" name="delete_playlist" value="{{ playlist_name }}">
+                                <button type="submit" class="delete-playlist-btn">🗑️ Supprimer</button>
+                            </form>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const modal = document.getElementById('flashModal');
+            const closeButton = document.querySelector('.close-button');
+
+            // Show modal if it has the data-show-modal attribute
+            if (modal && modal.dataset.showModal === 'true') {
+                modal.style.display = 'block';
+            }
+
+            // Close the modal when the close button is clicked
+            if (closeButton) {
+                closeButton.addEventListener('click', () => {
+                    modal.style.display = 'none';
+                });
+            }
+
+            // Close the modal when clicking outside of the modal content
+            window.addEventListener('click', (event) => {
+                if (event.target == modal) {
+                    modal.style.display = 'none';
+                }
+            });
+        });
+    </script>
+    
+</body>
+</html>
