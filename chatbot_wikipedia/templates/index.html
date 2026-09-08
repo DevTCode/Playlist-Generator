@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MoodifyBot - Assistant Musical</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="app-container">
+            <div class="sidebar">
+                <div class="logo">
+                    <i class="fas fa-music"></i>
+                    <span>MoodifyBot</span>
+                </div>
+                <button id="new-chat" class="new-chat-btn">
+                    <i class="fas fa-plus"></i>
+                    <span>Nouvelle conversation</span>
+                </button>
+                <div class="history-container">
+                    <h3>Historique</h3>
+                    <div id="chat-history"></div>
+                </div>
+                <div class="settings">
+                    <button id="clear-history">
+                        <i class="fas fa-trash"></i>
+                        <span>Effacer l'historique</span>
+                    </button>
+                    <button id="toggle-theme">
+                        <i class="fas fa-moon"></i>
+                        <span>Mode sombre</span>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="chat-container">
+                <div class="chat-header">
+                    <div class="current-chat-title" id="current-chat-title">
+                        MoodifyBot - Assistant Musical Intelligent
+                    </div>
+                </div>
+                
+                <div class="messages" id="messages">
+                    <div class="intro-message">
+                        <h1>🎵 Bienvenue sur MoodifyBot</h1>
+                        <p>Votre assistant musical intelligent ! Posez-moi des questions sur la musique, les artistes, les genres musicaux, et je vous aiderai à découvrir de nouveaux sons !</p>
+                        <div class="guide-container">
+                            <button id="guide-button" class="guide-btn">
+                                <i class="fas fa-question-circle"></i>
+                                Comment ça marche ?
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="input-area">
+                    <div class="input-container">
+                        <textarea id="user-input" placeholder="Posez votre question musicale..." rows="1"></textarea>
+                        <button id="send-button" title="Envoyer">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                    <div class="disclaimer">
+                        MoodifyBot vous aide à explorer l'univers musical. Découvrez artistes, albums et paroles de chansons!
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Popup Guide -->
+    <div id="guide-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-music"></i> Guide d'utilisation - MoodifyBot</h2>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="guide-section">
+                    <h3><i class="fas fa-info-circle"></i> Qu'est-ce que MoodifyBot ?</h3>
+                    <p>MoodifyBot est votre assistant musical intelligent qui peut répondre à vos questions sur la musique, les artistes, les genres musicaux, et bien plus encore !</p>
+                </div>
+
+                <div class="guide-section">
+                    <h3><i class="fas fa-list"></i> Catégories de questions supportées</h3>
+                    
+                    <div class="category">
+                        <h4><i class="fas fa-microphone"></i> Artistes</h4>
+                        <div class="examples">
+                            <p><strong>Biographies :</strong></p>
+                            <ul>
+                                <li>"Qui est [nom de l'artiste] ?"</li>
+                                <li>"Biographie de [artiste]"</li>
+                                <li>"Parle-moi de [artiste]"</li>
+                            </ul>
+                            <p><strong>Top chansons :</strong></p>
+                            <ul>
+                                <li>"Meilleures chansons de [artiste]"</li>
+                                <li>"Top hits de [artiste]"</li>
+                                <li>"Succès de [artiste]"</li>
+                            </ul>
+                            <p><strong>Discographie :</strong></p>
+                            <ul>
+                                <li>"Albums de [artiste]"</li>
+                                <li>"Discographie de [artiste]"</li>
+                                <li>"Liste des albums de [artiste]"</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="category">
+                        <h4><i class="fas fa-music"></i> Chansons et Paroles</h4>
+                        <div class="examples">
+                            <p><strong>⚠️ Format IMPORTANT pour éviter les confusions :</strong></p>
+                            <ul>
+                                <li>"Quelles sont les paroles de '<strong>titre</strong>' de '<strong>artiste</strong>' ?"</li>
+                                <li>"De quoi parle '<strong>titre</strong>' de '<strong>artiste</strong>' ?"</li>
+                                <li>"Signification de '<strong>titre</strong>' de '<strong>artiste</strong>'"</li>
+                            </ul>
+                            <p class="tip"><i class="fas fa-lightbulb"></i> <strong>Conseil :</strong> Utilisez toujours des guillemets autour du titre ET de l'artiste pour plus de précision !</p>
+                        </div>
+                    </div>
+
+                    <div class="category">
+                        <h4><i class="fas fa-guitar"></i> Genres Musicaux</h4>
+                        <div class="examples">
+                            <ul>
+                                <li>"Qu'est-ce que le [genre] ?"</li>
+                                <li>"C'est quoi le [genre] ?"</li>
+                                <li>"Définition du [genre]"</li>
+                                <li>"Histoire du [genre]"</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="category">
+                        <h4><i class="fas fa-balance-scale"></i> Comparaisons</h4>
+                        <div class="examples">
+                            <ul>
+                                <li>"Différence entre [genre1] et [genre2]"</li>
+                                <li>"Compare [élément1] et [élément2]"</li>
+                                <li>"[Genre1] vs [genre2]"</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="guide-section">
+                    <h3><i class="fas fa-spell-check"></i> Conseils pour bien formuler vos questions</h3>
+                    <div class="tips">
+                        <div class="tip-item">
+                            <i class="fas fa-check-circle"></i>
+                            <div>
+                                <strong>Soyez précis :</strong> Indiquez toujours l'artiste avec le titre de la chanson
+                            </div>
+                        </div>
+                        <div class="tip-item">
+                            <i class="fas fa-quote-left"></i>
+                            <div>
+                                <strong>Utilisez les guillemets :</strong> Mettez les titres de chansons entre guillemets
+                            </div>
+                        </div>
+                        <div class="tip-item">
+                            <i class="fas fa-language"></i>
+                            <div>
+                                <strong>Langues supportées :</strong> Français et anglais
+                            </div>
+                        </div>
+                        <div class="tip-item">
+                            <i class="fas fa-spell-check"></i>
+                            <div>
+                                <strong>Orthographe :</strong> Vérifiez l'orthographe des noms d'artistes
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="guide-section">
+                    <h3><i class="fas fa-star"></i> Exemples parfaits</h3>
+                    <div class="perfect-examples">
+                        <div class="example-item good">
+                            <i class="fas fa-thumbs-up"></i>
+                            <span>"Quelles sont les paroles de 'Bohemian Rhapsody' de 'Queen' ?"</span>
+                        </div>
+                        <div class="example-item good">
+                            <i class="fas fa-thumbs-up"></i>
+                            <span>"Qui est David Bowie ?"</span>
+                        </div>
+                        <div class="example-item good">
+                            <i class="fas fa-thumbs-up"></i>
+                            <span>"Meilleures chansons de The Beatles"</span>
+                        </div>
+                        <div class="example-item good">
+                            <i class="fas fa-thumbs-up"></i>
+                            <span>"Qu'est-ce que le jazz ?"</span>
+                        </div>
+                        <div class="example-item bad">
+                            <i class="fas fa-thumbs-down"></i>
+                            <span>"De quoi parle Yesterday ?" (manque l'artiste)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="guide-section">
+                    <h3><i class="fas fa-database"></i> Sources utilisées</h3>
+                    <div class="sources">
+                        <div class="source-item">
+                            <i class="fab fa-spotify"></i>
+                            <span><strong>Spotify</strong> - Top chansons, biographies d'artistes, albums</span>
+                        </div>
+                        <div class="source-item">
+                            <i class="fas fa-music"></i>
+                            <span><strong>Genius</strong> - Paroles et significations des chansons</span>
+                        </div>
+                        <div class="source-item">
+                            <i class="fab fa-lastfm"></i>
+                            <span><strong>Last.fm</strong> - Informations détaillées sur les artistes</span>
+                        </div>
+                        <div class="source-item">
+                            <i class="fab fa-wikipedia-w"></i>
+                            <span><strong>Wikipedia</strong> - Genres musicaux et informations générales</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="guide-section">
+                    <h3><i class="fas fa-rocket"></i> Commencez maintenant !</h3>
+                    <p>Vous êtes prêt à explorer l'univers musical ! Fermez ce guide et posez votre première question dans la zone de saisie ci-dessous.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
