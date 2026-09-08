@@ -1,0 +1,23 @@
+# MoodifyBot - Dépendances
+# Installation : pip install -r requirements.txt
+
+# Framework web
+Flask>=2.0.0
+
+# Requêtes HTTP
+requests>=2.25.0
+
+# Wikipedia (package correct)
+wikipedia>=1.4.0
+
+# APIs musicales (optionnelles)
+spotipy>=2.20.0
+pylast>=5.0.0
+musicbrainzngs>=0.7.0
+lyricsgenius>=3.0.0
+
+# Analyse de texte (optionnel mais recommandé)
+fuzzywuzzy>=0.18.0
+
+# Accélération pour fuzzywuzzy (optionnel)
+python-levenshtein>=0.20.0
